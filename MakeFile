@@ -1,0 +1,13 @@
+CC = gcc
+CFLAGS = -O3 -Wall
+
+SRC = main.c
+EXECUTABLE = main
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(SRC)
+	$(CC) $(CFLAGS) -o $@ $^ -lm
+
+clean:
+	rm -f $(EXECUTABLE)
