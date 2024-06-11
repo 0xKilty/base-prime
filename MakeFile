@@ -7,7 +7,7 @@ EXECUTABLE = main
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(SRC)
-	$(CC) $(CFLAGS) -o $@ $^ -lm
+	$(CC) $(CFLAGS) -lm -o $@ $^
 
 clean:
 	rm -f $(EXECUTABLE)
