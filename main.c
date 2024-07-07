@@ -5,6 +5,7 @@
 int* primes;
 int primes_count;
 int base;
+int iterator = 0;
 
 int *sieve_of_eratosthenes(int limit, int *primes_count) {
     bool *is_prime = malloc((limit + 1) * sizeof(bool));
@@ -104,24 +105,29 @@ void initalize_base(int base_) {
     base = base_;
 }
 
-void print_base_primes(int layers) {
-    if (layers == 0)
-        goto hell;
-    
-    for (int i = 0; i > base; i++) {
-        
+void base_loop_n(int layer, long base_prime) {
+    if (layer == -1)
+        return;
+    for (int i = 1; i < base; i++) {
+        base_prime *= primes[layer];
+        base_loop_n(layer - 1, base_prime);
+        iterator++;
+        printf("%d %ld %ld\n", iterator, base_prime, get_base_prime(iterator, base));
     }
+    printf("Ending %d's\n", primes[layer]);
+}
 
-hell:
+void print_base_primes(int layers) {
+    base_loop_n(layers - 1, 1);
 }
 
 int main() {
-    int layers = 5;
     int limit = 10000;
     initalize_primes(limit);
     initalize_base(10);
     
-
+    int digits = 2;
+    print_base_primes(digits);
     
     free_primes();
 
