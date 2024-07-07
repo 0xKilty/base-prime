@@ -1,4 +1,4 @@
-primes = [2, 3, 5, 7, 11]
+primes = [2, 3, 5, 7, 11, 13]
 base = 10
 iterator = 0
 
@@ -15,20 +15,18 @@ def base_loop(layer, base_prime):
     if layer == -1: 
         return
 
-    print(f"Starting {primes[layer]}'s")
     global iterator
-
-    # range_base = base - 1 if primes[layer] == 2 else base
-
+    
     for i in range(base):
         base_loop(layer - 1, base_prime)
         if i + 1 == base:
             break
         base_prime *= primes[layer]
         iterator += 1
-        print(primes[layer], i + 1, iterator, base_prime, get_base_prime(iterator, base))
-    print(f"Ending {primes[layer]}'s")
-        
+
+        pad = "" if base_prime <= iterator else "++++++++++++++++++++++++++"
+        print(primes[layer], i + 1, iterator, base_prime, get_base_prime(iterator, base), pad)
+
 
 def print_base_primes(layer):
     base_loop(layer - 1, 1)
