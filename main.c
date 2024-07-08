@@ -148,8 +148,8 @@ int main() {
     initalize_base(10);
     
     int digits = 5;
-    int largest_base = 1000000;
-    scan_base_range(1000000, digits);
+    int largest_base = 10000;
+    scan_base_range(largest_base, digits);
 
     free_primes();
 

@@ -48,9 +48,9 @@ def scan_base_range(largest_base, layers):
         iterator = 0
 
 def main():
-    digits = 4
+    digits = 5
 
-    scan_base_range(1_000_000, digits)
+    scan_base_range(10000, digits)
 
 if __name__ == "__main__":
     main()
