@@ -1,5 +1,5 @@
 primes = [2, 3, 5, 7, 11, 13]
-base = 10
+base = 3
 iterator = 0
 
 def get_base_prime(num, base):
@@ -16,25 +16,41 @@ def base_loop(layer, base_prime):
         return
 
     global iterator
-    
-    for i in range(base):
+    global base
+    next_iterator = iterator + pow(base, layer + 1) - 1
+    i = 0
+    while True:
         base_loop(layer - 1, base_prime)
         if i + 1 == base:
             break
         base_prime *= primes[layer]
         iterator += 1
 
-        pad = "" if base_prime <= iterator else "++++++++++++++++++++++++++"
-        print(primes[layer], i + 1, iterator, base_prime, get_base_prime(iterator, base), pad)
+        if base_prime == iterator:
+            print(f"{base}, {base_prime}")
+        elif base_prime > iterator:
+            iterator = next_iterator
+            break
+        i += 1
 
 
-def print_base_primes(layer):
-    base_loop(layer - 1, 1)
+def print_base_primes(layers):
+    base_loop(layers - 1, 1)
+
+def scan_base_range(largest_base, layers):
+    global base
+    global iterator
+    base = 3
+    print("equivalent base, base 10")
+    while base <= largest_base:
+        print_base_primes(layers)
+        base += 1
+        iterator = 0
 
 def main():
     digits = 4
 
-    print_base_primes(digits)
+    scan_base_range(1_000_000, digits)
 
 if __name__ == "__main__":
     main()

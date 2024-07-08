@@ -105,20 +105,41 @@ void initalize_base(int base_) {
     base = base_;
 }
 
-void base_loop_n(int layer, long base_prime) {
+void base_loop(int layer, long base_prime) {
     if (layer == -1)
         return;
-    for (int i = 1; i < base; i++) {
+
+    int next_iterator = iterator + power(base, layer + 1) - 1;
+    int i = 0;
+    while (true) {
+        base_loop(layer - 1, base_prime);
+        if (i++ == base)
+            break;
+
         base_prime *= primes[layer];
-        base_loop_n(layer - 1, base_prime);
         iterator++;
-        printf("%d %ld %ld\n", iterator, base_prime, get_base_prime(iterator, base));
+
+        if (base_prime == iterator) {
+            printf("%d, %ld\n", base, base_prime);
+        } else if (base_prime > iterator) {
+            iterator = next_iterator;
+            break;
+        }
     }
-    printf("Ending %d's\n", primes[layer]);
 }
 
 void print_base_primes(int layers) {
-    base_loop_n(layers - 1, 1);
+    base_loop(layers - 1, 1);
+}
+
+void scan_base_range(int largest_base, int layers) {
+    base = 3;
+    printf("equivalent base, base 10\n");
+    while (base <= largest_base) {
+        print_base_primes(layers);
+        base++;
+        iterator = 0;
+    }
 }
 
 int main() {
@@ -126,9 +147,10 @@ int main() {
     initalize_primes(limit);
     initalize_base(10);
     
-    int digits = 2;
-    print_base_primes(digits);
-    
+    int digits = 5;
+    int largest_base = 1000000;
+    scan_base_range(1000000, digits);
+
     free_primes();
 
     return 0;
