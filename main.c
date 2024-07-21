@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#define BASE_P_SIZE 8
 
 int* primes;
 int primes_count;
@@ -105,22 +106,65 @@ void initalize_base(int base_) {
     base = base_;
 }
 
-void base_loop(int layer, long base_prime, int num_base_p) {
+void print_arr(int* arr) {
+    for (int i = 0; i < BASE_P_SIZE; i++) {
+        printf("%d, ", arr[i]);
+    }
+}
+
+void print_bitwise_p_bin(long bitwise_p) {
+    int numBits = sizeof(long) * 8;
+    
+    for (int i = numBits - 1; i >= 0; i--) {
+        if (bitwise_p & (1UL << i)) {
+            printf("1");
+        } else {
+            printf("0");
+        }
+        if (i % 8 == 0 && i != 0) {
+            printf(" ");
+        }
+    }
+    printf(", ");
+}
+
+void print_bitwise_p(long bitwise_p) {
+    int num_bytes = sizeof(long);
+    char flag = 0;
+    for (int i = num_bytes - 1; i >= 0; i--) {
+        unsigned char byte = (bitwise_p >> (i * 8)) & 0xFF;
+        if (!flag && byte != 0)
+            flag = 1;
+        if (flag) {
+            if (byte <= 9) {
+                printf("%c", byte + 48);
+            }
+            else {
+                printf("%c", byte + 55);
+            }
+        }
+    }
+    printf(", ");
+}
+
+void base_loop(int layer, long base_prime, long num_base_p, long bitwise_p) {
     if (layer == -1)
         return;
 
     int next_iterator = iterator + power(base, layer + 1) - 1;
     int i = 0;
     while (true) {
-        base_loop(layer - 1, base_prime, num_base_p);
+        base_loop(layer - 1, base_prime, num_base_p, bitwise_p);
         if (i++ == base)
             break;
 
         base_prime *= primes[layer];
         iterator++;
         num_base_p += power(10, layer);
+        bitwise_p += 1 << (layer * 8);
         if (base_prime == iterator) {
-            printf("%d, %d, %ld\n", num_base_p, base, base_prime);
+            print_bitwise_p(bitwise_p);
+            printf("%d, %ld\n", base, base_prime);
         } else if (base_prime > iterator) {
             iterator = next_iterator;
             break;
@@ -129,12 +173,12 @@ void base_loop(int layer, long base_prime, int num_base_p) {
 }
 
 void print_base_primes(int layers) {
-    base_loop(layers - 1, 1, 0);
+    base_loop(layers - 1, 1, 0, 0);
 }
 
 void scan_base_range(int largest_base, int layers) {
     base = 3;
-    printf("equivalent base, base 10\n");
+    printf("Number base p, equivalent base, base 10\n");
     while (base <= largest_base) {
         print_base_primes(layers);
         base++;
@@ -147,7 +191,7 @@ int main() {
     initalize_primes(limit);
     initalize_base(10);
     
-    int digits = 7;
+    int digits = 8;
     int largest_base = 10000000;
     scan_base_range(largest_base, digits);
 

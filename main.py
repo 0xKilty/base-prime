@@ -52,7 +52,7 @@ def scan_base_range(largest_base, layers):
 def main():
     digits = 5
 
-    scan_base_range(10, digits)
+    scan_base_range(10000000, digits)
 
 if __name__ == "__main__":
     main()
