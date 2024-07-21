@@ -147,20 +147,19 @@ void print_bitwise_p(long bitwise_p) {
     printf(", ");
 }
 
-void base_loop(int layer, long base_prime, long num_base_p, long bitwise_p) {
+void base_loop(int layer, long base_prime, long bitwise_p) {
     if (layer == -1)
         return;
 
     int next_iterator = iterator + power(base, layer + 1) - 1;
     int i = 0;
     while (true) {
-        base_loop(layer - 1, base_prime, num_base_p, bitwise_p);
+        base_loop(layer - 1, base_prime, bitwise_p);
         if (i++ == base)
             break;
 
         base_prime *= primes[layer];
         iterator++;
-        num_base_p += power(10, layer);
         bitwise_p += 1 << (layer * 8);
         if (base_prime == iterator) {
             print_bitwise_p(bitwise_p);
@@ -173,7 +172,7 @@ void base_loop(int layer, long base_prime, long num_base_p, long bitwise_p) {
 }
 
 void print_base_primes(int layers) {
-    base_loop(layers - 1, 1, 0, 0);
+    base_loop(layers - 1, 1, 0);
 }
 
 void scan_base_range(int largest_base, int layers) {
@@ -192,7 +191,7 @@ int main() {
     initalize_base(10);
     
     int digits = 8;
-    int largest_base = 10000000;
+    int largest_base = 100000000;
     scan_base_range(largest_base, digits);
 
     free_primes();
